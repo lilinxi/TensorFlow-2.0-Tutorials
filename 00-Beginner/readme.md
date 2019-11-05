@@ -243,6 +243,18 @@ model.compile(
     metrics=['accuracy'])
 ```
 
+## Numpy
+
+```
+使用 MNIST 数据集加载和处理Numpy数据
+```
+
+### 数据预处理
+
+1. np.load()加载npz文件
+2. tf.data.Dataset.from_tensor_slices()组合数据和标签，形成Dataset对象
+3. Dataset对象：shuffle(), batch()
+
 ---
 
 # references
