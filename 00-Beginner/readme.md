@@ -201,6 +201,48 @@ history = model.fit(normed_train_data, train_labels, epochs=EPOCHS,
 
 # 加载和预处理数据
 
+## CSV
+
+```
+使用 Titanic 数据集加载和处理CSV数据
+```
+
+### 数据预处理
+
+使用tf.data.experimental.make_csv_dataset()加载csv文件为dataset对象。
+
+#### 连续值处理
+
+将连续值拼接为一个矩阵，并进行零均值化。
+
+#### 类别值处理
+
+使用tf.feature_column.categorical_column_with_vocabulary_list()创建一个分类列。
+
+#### 组合处理
+
+```python
+preprocessing_layer = tf.keras.layers.DenseFeatures(categorical_columns+numeric_columns)
+```
+
+将对连续值和类别值的处理合并成一个预处理层，作为输入层的一部分。
+
+### 模型
+
+```python
+model = tf.keras.Sequential([
+  preprocessing_layer,
+  tf.keras.layers.Dense(128, activation='relu'),
+  tf.keras.layers.Dense(128, activation='relu'),
+  tf.keras.layers.Dense(1, activation='sigmoid'),
+])
+
+model.compile(
+    loss='binary_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy'])
+```
+
 ---
 
 # references
