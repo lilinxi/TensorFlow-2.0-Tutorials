@@ -47,6 +47,7 @@ model.compile(optimizer='adam',
 - Adam 是目前最好的优化函数
 - verbose：日志显示
 - epochs：批次大小是一个超参数，用于定义在更新内部模型参数之前要处理的样本数量。时期数是一个超参数，它定义学习算法将在整个训练数据集中工作的次数。一个时期意味着训练数据集中的每个样本都有机会更新内部模型参数。一个时期由一个或多个批次组成。
+- model 常用方法：compile(), fit(), predict(), evaluate()
 
 ## 文本分类
 
@@ -146,9 +147,55 @@ model.compile(loss='mse',  # 平方均值误差
               metrics=['mae', 'mse'])  # 监控指标：绝对值均值误差，平方均值误差
 ```
 
+检测当一定数量的 epochs 之后验证集的损失没有明显改善，则提前终止训练。通过定义一个callback来实现。
+
+```python
+early_stop = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
+
+history = model.fit(normed_train_data, train_labels, epochs=EPOCHS,
+                    validation_split = 0.2, verbose=0, callbacks=[early_stop, PrintDot()])
+```
+
 ## 过拟合和欠拟合
 
+```
+使用 IMDB 数据集进行正则化和 dropout 的效果测试
+```
+
+### 数据预处理
+
+将文本从不定长的索引模型转化为定长的 multi_hot 模型。
+
+### 模型
+
+通过model.fit()的返回值history获取训练过程中的训练集损失和验证集损失进行绘图分析。
+
+使用不同参数个数的模型，应用L1，L2正则化的模型，应用 dropout 的模型进行比较。
+
 ## 保存和加载
+
+```
+使用 MNIST 数据集测试保存和加载
+```
+
+### 数据预处理
+
+对图像进行降维（展平）和均值转化。
+
+### 模型
+
+可以使用训练好的模型而无需从头开始重新训练，或在打断的地方开始训练，以防止训练过程没有保存。
+
+#### checkpoints
+
+- 保存：tf.keras.callbacks.ModelCheckpoint/model.save_weights()
+- 加载：model.load_weights()
+
+#### model
+
+- 保存：model.save()
+- 加载：tf.keras.models.load_model()
+- HDF5 只是保存了对象的配置来保存模型的架构，SavedModel 保存了整个执行图。
 
 ---
 
