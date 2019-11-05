@@ -56,7 +56,11 @@ model.compile(optimizer='adam',
 
 ### TensorFlow Hub 文本分类
 
+#### 数据预处理
+
 使用**预训练文本嵌入（text embedding）模型**将文本转化为拥有约 1M 词汇量且维度固定的模型。
+
+#### 模型
 
 ```python
 model = tf.keras.Sequential()
@@ -71,7 +75,7 @@ model.compile(optimizer='adam',
 
 ### 预处理文本分类
 
-文本预处理：
+#### 数据预处理
 
 1. 编码
     - The encoder encodes the string by breaking it into subwords or characters if the word is not in its dictionary. So the more a string resembles the dataset, the shorter the encoded representation will be.
@@ -93,8 +97,7 @@ The original string: "Hello TensorFlow."
 7975 ----> .
 ```
 
-- Embedding：The resulting dimensions are: (batch, sequence, embedding). 嵌入层的输出是一个二维向量，每个单词在输入文本（输入文档）序列中嵌入一个。
-- GlobalAveragePooling1D：降维
+#### 模型
 
 ```python
 model = keras.Sequential([
@@ -107,7 +110,41 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 ```
 
+- Embedding：The resulting dimensions are: (batch, sequence, embedding). 嵌入层的输出是一个二维向量，每个单词在输入文本（输入文档）序列中嵌入一个。
+- GlobalAveragePooling1D：降维
+
 ## 回归
+
+```
+使用 Auto MPG 数据集进行回归分析
+```
+
+### 数据预处理
+
+- 使用 pandas 进行数据预处理
+    - dropna()，去除空值
+    - pop('Origin')，提出 label
+    - sample()，采样训练集
+    - drop()，去除训练集，获得测试集
+    - describe()，使用其中的均值和方差进行数据规范化
+    - transpose()
+- 使用 seaborn 提供 matplotlib 之上的绘图 API
+
+### 模型
+
+```python
+model = keras.Sequential([
+    layers.Dense(64, activation='relu', input_shape=[len(train_dataset.keys())]),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(1)
+  ])
+
+optimizer = tf.keras.optimizers.RMSprop(0.001)
+
+model.compile(loss='mse',  # 平方均值误差
+              optimizer=optimizer,
+              metrics=['mae', 'mse'])  # 监控指标：绝对值均值误差，平方均值误差
+```
 
 ## 过拟合和欠拟合
 
