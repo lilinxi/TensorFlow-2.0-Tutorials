@@ -257,9 +257,14 @@ model.compile(
 
 ## Pandas
 
+```
+使用 MNIST 数据集加载和处理Pandas数据
+```
+
 ### 数据预处理
 
-1. pd.Categorical(), df.thal.cat.codes 将 Pandas.DataFrame 类别信息转化成数值信息
+1. pd.read_csv() 加载csv数据
+2. pd.Categorical(), df.thal.cat.codes 将 Pandas.DataFrame 类别信息转化成数值信息
     - Pandas.DataFrame 直接转化成Dataset对象
     - Pandas.DataFrame 先转化成 dict，再转化成Dataset对象，在model前加读取dict的输入层
 
@@ -278,6 +283,22 @@ model_func.compile(optimizer='adam',
                    loss='binary_crossentropy',
                    metrics=['accuracy'])
 ```
+
+## 图像
+
+```
+使用 flower_photos 数据集加载和处理图像数据
+```
+
+### 数据预处理
+
+1. tf.keras.preprocessing.image.ImageDataGenerator().flow_from_directory()加载图像
+2. 自主加载图像
+    1. tf.data.Dataset.list_files()
+    2. 从路径读取图像
+    3. 转换图像
+    4. 获取label
+    5. prefetch and use cache
 
 ---
 
