@@ -255,6 +255,30 @@ model.compile(
 2. tf.data.Dataset.from_tensor_slices()组合数据和标签，形成Dataset对象
 3. Dataset对象：shuffle(), batch()
 
+## Pandas
+
+### 数据预处理
+
+1. pd.Categorical(), df.thal.cat.codes 将 Pandas.DataFrame 类别信息转化成数值信息
+    - Pandas.DataFrame 直接转化成Dataset对象
+    - Pandas.DataFrame 先转化成 dict，再转化成Dataset对象，在model前加读取dict的输入层
+
+### 模型
+
+```python
+inputs = {key: tf.keras.layers.Input(shape=(), name=key) for key in df.keys()}
+x = tf.stack(list(inputs.values()), axis=-1)
+
+x = tf.keras.layers.Dense(10, activation='relu')(x)
+output = tf.keras.layers.Dense(1, activation='sigmoid')(x)
+
+model_func = tf.keras.Model(inputs=inputs, outputs=output)
+
+model_func.compile(optimizer='adam',
+                   loss='binary_crossentropy',
+                   metrics=['accuracy'])
+```
+
 ---
 
 # references
