@@ -40,7 +40,7 @@ model = keras.Sequential([
 ])
 
 model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
+              loss='sparse_categorical_crossentropy',  # 多分类模型，且不是 one-hot 类别
               metrics=['accuracy'])
 ```
 
@@ -49,6 +49,63 @@ model.compile(optimizer='adam',
 - epochs：批次大小是一个超参数，用于定义在更新内部模型参数之前要处理的样本数量。时期数是一个超参数，它定义学习算法将在整个训练数据集中工作的次数。一个时期意味着训练数据集中的每个样本都有机会更新内部模型参数。一个时期由一个或多个批次组成。
 
 ## 文本分类
+
+```
+使用 IMDB 数据集进行情感分析
+```
+
+### TensorFlow Hub 文本分类
+
+使用**预训练文本嵌入（text embedding）模型**将文本转化为拥有约 1M 词汇量且维度固定的模型。
+
+```python
+model = tf.keras.Sequential()
+model.add(hub_layer)
+model.add(tf.keras.layers.Dense(16, activation='relu'))
+model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
+
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',  # 二分类模型
+              metrics=['accuracy'])
+```
+
+### 预处理文本分类
+
+文本预处理：
+
+1. 编码
+    - The encoder encodes the string by breaking it into subwords or characters if the word is not in its dictionary. So the more a string resembles the dataset, the shorter the encoded representation will be.
+2. 归一化
+    - 长度标准化
+    
+编码 e.g.
+
+```python
+Encoded string is [4025, 222, 6307, 2327, 4043, 2120, 7975]
+The original string: "Hello TensorFlow."
+
+4025 ----> Hell
+222 ----> o 
+6307 ----> Ten
+2327 ----> sor
+4043 ----> Fl
+2120 ----> ow
+7975 ----> .
+```
+
+- Embedding：The resulting dimensions are: (batch, sequence, embedding). 嵌入层的输出是一个二维向量，每个单词在输入文本（输入文档）序列中嵌入一个。
+- GlobalAveragePooling1D：降维
+
+```python
+model = keras.Sequential([
+  keras.layers.Embedding(encoder.vocab_size, 16),
+  keras.layers.GlobalAveragePooling1D(),
+  keras.layers.Dense(1, activation='sigmoid')])
+
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',  # 二分类模型
+              metrics=['accuracy'])
+```
 
 ## 回归
 
