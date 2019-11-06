@@ -318,6 +318,7 @@ model_func.compile(optimizer='adam',
 
 - RNN->BiRNN
 - LSTM->BiLSTM
+- [Understanding LSTM Networks](http://colah.github.io/posts/2015-08-Understanding-LSTMs/)
 
 ```python
 model = tf.keras.Sequential()
