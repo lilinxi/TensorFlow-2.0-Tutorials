@@ -336,6 +336,17 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 ```
 
+## Unicode
+
+### 数据预处理
+
+- tf.strings.unicode_decode()
+- tf.strings.unicode_encode()
+- tf.strings.unicode_transcode()
+- tf.SparseTensor：稠密存储稀疏矩阵
+
+
+
 ---
 
 # references
