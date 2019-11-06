@@ -298,7 +298,40 @@ model_func.compile(optimizer='adam',
     2. 从路径读取图像
     3. 转换图像
     4. 获取label
-    5. prefetch and use cache
+    5. prefetch and use cache(加速)
+
+
+## 文本
+
+```
+使用《Homer's Illiad》的三种翻译版本进行训练，预测来自那种翻译版本
+```
+
+### 数据预处理
+
+1. tf.data.TextLineDataset 建立文本数据集
+2. tfds.features.text.Tokenizer() 或许词汇表数量
+3. tfds.features.text.TokenTextEncoder() 编码句子
+4. 划分为训练集和测试集，并将各个批次的文本向量补齐（引入了0来填充，词汇表数目加一）
+
+### 模型
+
+- RNN->BiRNN
+- LSTM->BiLSTM
+
+```python
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.Embedding(vocab_size, 64)) # 将整数表示转换为密集矢量嵌入
+model.add(tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64))) # BiLSTM
+for units in [64, 64]:
+    model.add(tf.keras.layers.Dense(units, activation='relu'))
+
+model.add(tf.keras.layers.Dense(3, activation='softmax'))
+
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+```
 
 ---
 
