@@ -316,8 +316,10 @@ model_func.compile(optimizer='adam',
 
 ### 模型
 
-- RNN->BiRNN
-- LSTM->BiLSTM
+- RNN->BiRNN（不支持长期记忆，记忆的难度随着时间线性增长）
+- LSTM->BiLSTM（原生支持长期记忆）
+- 循环网络是有记忆的。给神经网络增加记忆的目的在于：序列本身带有信息，循环网络用它来执行前馈网络不能执行的任务。
+- 反向传播：时序反向传播算法，即BPTT。
 - [Understanding LSTM Networks](http://colah.github.io/posts/2015-08-Understanding-LSTMs/)
 
 ```python
